@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
 
   config.vm.provision "shell", path: "thermal/bootstrap.sh", keep_color: true, privileged: false
-  config.vm.synced_folder ".", "/var/www", :mount_options => ["dmode=777", "fmode=666"], create: true
+  config.vm.synced_folder ".", setting["config"]["ssh_path"], :mount_options => ["dmode=777", "fmode=666"], create: true
 
   # [Optional] Vagrant Plugin Hostsupdater
   # https://github.com/cogitatio/vagrant-hostsupdater
