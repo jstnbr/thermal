@@ -299,7 +299,8 @@
     /**
      * Thermal config.
      */
-    $thermal_config_name = 'basic.test';
+    $thermal_config_name = 'thermal.test';
+    $thermal_config_site = 'site-url.com';
 
     /**
      * Thermal status.
