@@ -1,6 +1,10 @@
 require "yaml"
 
-setting = YAML.load_file "thermal/thermal-config.yml"
+if File.exists?('thermal-config.yml')
+  setting = YAML.load_file "thermal-config.yml"
+else
+  setting = YAML.load_file "thermal/thermal-config.yml"
+end
 
 Vagrant.configure("2") do |config|
 
