@@ -185,7 +185,8 @@ if [ ! -d /var/www/"${thermal_config_wp_dir}"/wp-content/themes ]; then
 fi
 
 # Pass config variable to status page
-sudo sed -i "s:thermal_config_name = 'placeholder':thermal_config_name = '"${thermal_config_name}"':g" /var/www/"${thermal_config_wp_dir}"/thermal/status.php
+sudo sed -i "s:thermal_config_name = 'thermal.test':thermal_config_name = '"${thermal_config_name}"':g" "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/thermal/status.php
+sudo sed -i "s:thermal_config_site = 'site-url.com':thermal_config_site = '"${thermal_config_site}"':g" "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/thermal/status.php
 
 # Correct permission of public key
 chmod 600 ~/.ssh/id_rsa
