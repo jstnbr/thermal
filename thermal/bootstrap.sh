@@ -50,6 +50,16 @@ thermal_apache_servername_update () {
     return 1
   fi
 
+  sudo sed -i "s:/var/www:"${thermal_config_ssh_path}":g" /etc/apache2/sites-available/thermal.conf
+
+  if [ $? -ne 0 ]; then
+    echo "${red}Error:${reset} Could not update Apache server."
+    echo
+    echo "Command: ${bold}${yellow}sudo sed -i "s:/var/www:"${thermal_config_ssh_path}":g" /etc/apache2/sites-available/thermal.conf${reset}"
+
+    return 1
+  fi
+
   sudo sed -i "s:ServerName status.thermal.test:ServerName status."${thermal_config_name}":g" /etc/apache2/sites-available/thermal.conf
 
   if [ $? -ne 0 ]; then
