@@ -29,7 +29,11 @@ _parse_yaml() {
   }'
 }
 
-eval $(_parse_yaml /var/www/thermal/thermal-config.yml "thermal_")
+if [ -f ../thermal-config.yml ]; then
+  eval $(_parse_yaml ../thermal-config.yml "thermal_")
+else
+  eval $(_parse_yaml thermal-config.yml "thermal_")
+fi
 
 thermal_apache_servername_update () {
   echo
