@@ -292,8 +292,8 @@
     /**
      * WordPress version.
      */
-    if ( file_exists( '/var/www/wp-includes/version.php' ) ) {
-      require '/var/www/wp-includes/version.php';
+    if ( file_exists( '../wp-includes/version.php' ) ) {
+      require '../wp-includes/version.php';
     }
 
     /**
@@ -394,12 +394,10 @@
           <td><?php echo '<span title="' . phpversion() . '">✅</span>'; ?></td>
         </tr>
       
-        <?php if ( $wp_version ) : ?>
-          <tr>
-            <td>WordPress</td>
-            <td><?php echo ( $wp_version ? '<span title="' . $wp_version . '">✅</span>' : '<span title="No version.php found in /var/www/wordpress/wp-includes">❌</span>' ); ?></td>
-          </tr>
-        <?php endif; ?>
+        <tr>
+          <td>WordPress</td>
+          <td><?php echo ( $wp_version ? '<span title="' . $wp_version . '">✅</span>' : '<span title="No version.php found in /var/www/wordpress/wp-includes">❌</span>' ); ?></td>
+        </tr>
       </table>
       
       <div class="heading">
