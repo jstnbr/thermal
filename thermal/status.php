@@ -375,7 +375,7 @@
       <div class="heading">
         <strong>System</strong>
       </div>
-      
+
       <table class="table">
         <tr>
           <td>OS</td>
@@ -393,17 +393,17 @@
           <td>PHP</td>
           <td><?php echo '<span title="' . phpversion() . '">✅</span>'; ?></td>
         </tr>
-      
+
         <tr>
           <td>WordPress</td>
           <td><?php echo ( $wp_version ? '<span title="' . $wp_version . '">✅</span>' : '<span title="No version.php found in /var/www/wordpress/wp-includes">❌</span>' ); ?></td>
         </tr>
       </table>
-      
+
       <div class="heading">
         <strong>Database</strong>
       </div>
-      
+
       <table class="table">
         <tr>
           <td>Host</td>
@@ -422,11 +422,11 @@
           <td>thermal</td>
         </tr>
       </table>
-      
+
       <div class="heading">
         <strong>SSH</strong>
       </div>
-      
+
       <table class="table">
         <tr>
           <td>Host</td>
@@ -441,11 +441,11 @@
           <td>vagrant</td>
         </tr>
       </table>
-      
+
       <div class="heading">
         <strong>WordPress</strong>
       </div>
-      
+
       <table class="table">
         <tr>
           <td>User</td>
