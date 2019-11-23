@@ -29,10 +29,12 @@ _parse_yaml() {
   }'
 }
 
-if [ -f ../thermal-config.yml ]; then
-  eval $(_parse_yaml ../thermal-config.yml "thermal_")
+if [ -f $(sudo find / -name "thermal-config.yml") ]; then
+  eval $(_parse_yaml $(sudo find / -name "thermal-config.yml") "thermal_")
 else
-  eval $(_parse_yaml thermal-config.yml "thermal_")
+  echo "${red}Error:${reset} Thermal config not found."
+
+  return 1
 fi
 
 thermal_apache_servername_update () {
