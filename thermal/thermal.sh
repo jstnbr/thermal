@@ -48,7 +48,7 @@ thermal_check_backup_dir () {
   echo "${bold}${blue}Checking local backup directory...${reset}"
   echo
 
-  if [ -d /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}" ]; then
+  if [ -d "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}" ]; then
     backup_dir_local_exists=true
 
     echo
@@ -60,7 +60,7 @@ thermal_check_backup_dir () {
     echo
   fi
 
-  touch /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/test_writable > /dev/null 2>&1
+  touch "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/test_writable > /dev/null 2>&1
 
   if [ $? -ne 0 ]; then
     echo
@@ -69,7 +69,7 @@ thermal_check_backup_dir () {
     echo "Directory: ${bold}${yellow}"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"${reset}"
     echo
   else
-    rm /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/test_writable > /dev/null 2>&1
+    rm "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/test_writable > /dev/null 2>&1
   fi
 
   echo
@@ -108,7 +108,7 @@ thermal_check_database () {
   echo "${bold}${blue}Checking database...${reset}"
   echo
 
-  wp db check --path=/var/www/"${thermal_config_wp_dir}" --quiet
+  wp db check --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet
 
   if [ $? -ne 0 ]; then
     echo "${red}Error:${reset} Cannot connect to database.${reset}"
@@ -159,13 +159,13 @@ thermal_check_ssh () {
 thermal_db_export_local () {
   db_export_local_succeeded=false
 
-  wp db export /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql --path=/var/www/"${thermal_config_wp_dir}"
+  wp db export "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Could not export local database.${reset}"
     echo
-    echo "Command: ${bold}${yellow}wp db export /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql --path=/var/www/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}wp db export "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
   else
     db_export_local_succeeded=true
 
@@ -177,13 +177,13 @@ thermal_db_export_local () {
 thermal_db_export_local_old () {
   db_export_local_old_succeeded=false
 
-  wp db export /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql-old.sql --path=/var/www/"${thermal_config_wp_dir}"
+  wp db export "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql-old.sql --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Could not export old local database.${reset}"
     echo
-    echo "Command: ${bold}${yellow}wp db export /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql-old.sql --path=/var/www/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}wp db export "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql-old.sql --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
   else
     db_export_local_old_succeeded=true
 
@@ -195,13 +195,13 @@ thermal_db_export_local_old () {
 thermal_db_local_import_local () {
   db_local_import_local_succeeded=false
 
-  wp db import /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql --path=/var/www/"${thermal_config_wp_dir}"
+  wp db import "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Failed to import database.${reset}"
     echo
-    echo "Command: ${bold}${yellow}wp db import /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql --path=/var/www/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}wp db import "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
   else
     db_local_import_local_succeeded=true
 
@@ -213,13 +213,13 @@ thermal_db_local_import_local () {
 thermal_db_local_import_remote () {
   db_local_import_remote_succeeded=false
 
-  wp db import /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql --path=/var/www/"${thermal_config_wp_dir}"
+  wp db import "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Failed to import database.${reset}"
     echo
-    echo "Command: ${bold}${yellow}wp db import /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql --path=/var/www/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}wp db import "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
   else
     db_local_import_remote_succeeded=true
 
@@ -236,19 +236,19 @@ thermal_db_upload_local () {
   echo
 
   # Upload SQL file
-  scp /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql
+  scp "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql
 
   if [ $? -ne 0 ]; then
     echo
     echo "Retrying..."
     echo
 
-    scp /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql
+    scp "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql
 
     if [ $? -ne 0 ]; then
       echo "${red}Error:${reset} Could not upload SQL file.${reset}"
       echo
-      echo "Command: ${bold}${yellow}scp /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql${reset}"
+      echo "Command: ${bold}${yellow}scp "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_mysql.sql${reset}"
 
       return 1
     else
@@ -274,14 +274,14 @@ thermal_db_download_remote () {
   echo
 
   # Download SQL file
-  scp "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql
+  scp "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql
 
   if [ $? -ne 0 ]; then
     echo
     echo "Retrying..."
     echo
 
-    scp "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql
+    scp "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_site}"_mysql.sql
 
     if [ $? -ne 0 ]; then
       echo "${red}Error:${reset} Could not download SQL file.${reset}"
@@ -382,13 +382,13 @@ thermal_flush_cache_local () {
   echo "${bold}${blue}Flushing local cache...${reset}"
   echo
 
-  wp cache flush --path=/var/www/"${thermal_config_wp_dir}"
+  wp cache flush --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Failed to flush local cache.${reset}"
     echo
-    echo "Command: ${bold}${yellow}wp cache flush --path=/var/www/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}wp cache flush --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
   else
     flush_cache_local_succeeded=true
 
@@ -426,13 +426,13 @@ thermal_flush_rewrite_local () {
   echo "${bold}${blue}Flushing local rewrite rules...${reset}"
   echo
 
-  wp rewrite flush --path=/var/www/"${thermal_config_wp_dir}"
+  wp rewrite flush --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Failed to flush local rewrite rules.${reset}"
     echo
-    echo "Command: ${bold}${yellow}wp rewrite flush --path=/var/www/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}wp rewrite flush --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
   else
     flush_rewrite_local_succeeded=true
 
@@ -471,7 +471,7 @@ thermal_repair_backup_dir () {
   echo "${bold}${blue}Checking local backup directory...${reset}"
   echo
 
-  if [ -d /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}" ]; then
+  if [ -d "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}" ]; then
     backup_dir_local_exists=true
 
     echo "${green}Local backup directory located in: ${bold}${yellow}"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"${reset}"
@@ -479,13 +479,13 @@ thermal_repair_backup_dir () {
     echo "Creating ${yellow}${thermal_config_backup_dir}${reset} directory..."
     echo
 
-    mkdir /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"
+    mkdir "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"
 
     if [ $? -ne 0 ]; then
       echo
       echo "${red}Could not create backup directory.${reset}"
       echo
-      echo "Command: ${bold}${yellow}mkdir /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"${reset}"
+      echo "Command: ${bold}${yellow}mkdir "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"${reset}"
     else
       backup_dir_local_exists=true
 
@@ -493,7 +493,7 @@ thermal_repair_backup_dir () {
     fi
   fi
 
-  touch /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/test_writable > /dev/null 2>&1
+  touch "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/test_writable > /dev/null 2>&1
 
   if [ $? -ne 0 ]; then
     echo
@@ -501,7 +501,7 @@ thermal_repair_backup_dir () {
     echo
     echo "Directory: ${bold}${yellow}"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"${reset}"
   else
-    rm /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/test_writable > /dev/null 2>&1
+    rm "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/test_writable > /dev/null 2>&1
   fi
 
   echo
@@ -522,7 +522,7 @@ thermal_repair_backup_dir () {
       echo
       echo "${red}Could not create backup directory.${reset}"
       echo
-      echo "Command: ${bold}${yellow}mkdir /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"${reset}"
+      echo "Command: ${bold}${yellow}mkdir "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"${reset}"
     else
       backup_dir_remote_exists=true
 
@@ -547,19 +547,19 @@ thermal_repair_database () {
   echo "${bold}${blue}Repairing database...${reset}"
   echo
 
-  if [ ! $(find "/var/www/"${thermal_config_wp_dir}"" -name wp-config.php) ]; then
+  if [ ! $(find ""${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"" -name wp-config.php) ]; then
     echo
-    echo "Config file wp-config.php not found with command: ${bold}${yellow}$(find "/var/www/"${thermal_config_wp_dir}"" -name wp-config.php)${reset}"
+    echo "Config file wp-config.php not found with command: ${bold}${yellow}$(find ""${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"" -name wp-config.php)${reset}"
     echo
     echo "${blue}Creating wp-config.php...${reset}"
 
-    wp core config --dbname="thermal" --dbuser="root" --dbpass="root" --dbhost="localhost" --dbprefix="wp_" --path=/var/www/"${thermal_config_wp_dir}" --quiet
+    wp core config --dbname="thermal" --dbuser="root" --dbpass="root" --dbhost="localhost" --dbprefix="wp_" --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet
 
     if [ $? -ne 0 ]; then
       echo
       echo "${red}Error:${reset} Failed to create wp-config.php file."
       echo
-      echo "Command: ${bold}${yellow}wp core config --dbname="thermal" --dbuser="root" --dbpass="root" --dbhost="localhost" --dbprefix="wp_" --path=/var/www/"${thermal_config_wp_dir}"${reset}"
+      echo "Command: ${bold}${yellow}wp core config --dbname="thermal" --dbuser="root" --dbpass="root" --dbhost="localhost" --dbprefix="wp_" --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
       echo
     else
       echo
@@ -570,16 +570,16 @@ thermal_repair_database () {
   echo
   echo "${bold}${blue}Updating wp-config.php settings...${reset}"
 
-  wp config set DB_NAME thermal --path=/var/www/"${thermal_config_wp_dir}" --quiet
-  wp config set DB_USER root --path=/var/www/"${thermal_config_wp_dir}" --quiet
-  wp config set DB_PASSWORD root --path=/var/www/"${thermal_config_wp_dir}" --quiet
-  wp config set DB_HOST lcoalhost --path=/var/www/"${thermal_config_wp_dir}" --quiet
-  wp config set table_prefix wp_ --path=/var/www/"${thermal_config_wp_dir}" --quiet
+  wp config set DB_NAME thermal --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet
+  wp config set DB_USER root --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet
+  wp config set DB_PASSWORD root --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet
+  wp config set DB_HOST lcoalhost --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet
+  wp config set table_prefix wp_ --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet
 
   echo
   echo "${bold}${blue}Checking connection to database...${reset}"
 
-  wp db check --path=/var/www/"${thermal_config_wp_dir}"
+  wp db check --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
@@ -596,13 +596,13 @@ thermal_db_search_replace_local () {
   echo
   echo "${bold}${blue}Running database search replace...${reset}"
 
-  wp search-replace "${thermal_config_site}" "${thermal_config_name}" --path=/var/www/"${thermal_config_wp_dir}" --quiet > /dev/null 2>&1
+  wp search-replace "${thermal_config_site}" "${thermal_config_name}" --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet > /dev/null 2>&1
 
   if [ $? -ne 0 ]; then
     echo
     echo "${yellow}Search replace failed.${reset}"
     echo
-    echo "Command: ${bold}${yellow}wp search-replace "${thermal_config_site}" "${thermal_config_name}" --path=/var/www/"${thermal_config_wp_dir}" --quiet${reset}"
+    echo "Command: ${bold}${yellow}wp search-replace "${thermal_config_site}" "${thermal_config_name}" --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet${reset}"
   else
     db_search_replace_local_succeeded=true
 
@@ -651,13 +651,13 @@ EOF
 }
 
 thermal_refresh () {
-  . /var/www/thermal/thermal.sh
+  . "${thermal_config_ssh_path}"/thermal/thermal.sh
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Could not refresh Thermal."
     echo
-    echo "Command: ${bold}${yellow}. /var/www/thermal/thermal.sh${reset}"
+    echo "Command: ${bold}${yellow}. "${thermal_config_ssh_path}"/thermal/thermal.sh${reset}"
     echo
   else
     echo
@@ -687,13 +687,13 @@ thermal_sync_wp_content_down () {
   echo "${bold}${blue}Syncing wp-content...${reset}"
   echo
 
-  rsync -r "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content /var/www/"${thermal_config_wp_dir}"
+  rsync -r "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Sync failed.${reset}"
     echo
-    echo "Command: ${bold}${yellow}rsync -r "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content /var/www/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}rsync -r "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
 
     return 1
   else
@@ -710,13 +710,13 @@ thermal_sync_wp_content_up () {
   echo "${bold}${blue}Syncing wp-content...${reset}"
   echo
 
-  rsync -re ssh /var/www/"${thermal_config_wp_dir}"/wp-content "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}" --exclude "mu-plugins/force-strong-passwords" --exclude "mu-plugins/wpengine-common"
+  rsync -re ssh "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}" --exclude "mu-plugins/force-strong-passwords" --exclude "mu-plugins/wpengine-common"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Sync failed.${reset}"
     echo
-    echo "Command: ${bold}${yellow}rsync -re ssh /var/www/"${thermal_config_wp_dir}"/wp-content "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}" --exclude "mu-plugins/force-strong-passwords" --exclude "mu-plugins/wpengine-common"${reset}"
+    echo "Command: ${bold}${yellow}rsync -re ssh "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}" --exclude "mu-plugins/force-strong-passwords" --exclude "mu-plugins/wpengine-common"${reset}"
 
     return 1
   else
@@ -734,13 +734,13 @@ thermal_wp_content_archive_local () {
   echo "${bold}${blue}Archiving local wp-content...${reset}"
   echo
 
-  tar -zcf /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content.tar.gz -C /var/www/"${thermal_config_wp_dir}" wp-content
+  tar -zcf "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content.tar.gz -C "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" wp-content
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Archive local wp-content failed.${reset}"
     echo
-    echo "Command: ${bold}${yellow}tar -zcf /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content.tar.gz -C /var/www/"${thermal_config_wp_dir}" wp-content${reset}"
+    echo "Command: ${bold}${yellow}tar -zcf "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content.tar.gz -C "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" wp-content${reset}"
 
     return 1
   else
@@ -758,13 +758,13 @@ thermal_wp_content_archive_local_old () {
   echo "${bold}${blue}Archiving old local wp-content...${reset}"
   echo
 
-  tar -zcf /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content-old.tar.gz -C /var/www/"${thermal_config_wp_dir}" wp-content
+  tar -zcf "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content-old.tar.gz -C "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" wp-content
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Archive old local wp-content failed.${reset}"
     echo
-    echo "Command: ${bold}${yellow}tar -zcf /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content-old.tar.gz -C /var/www/"${thermal_config_wp_dir}" wp-content${reset}"
+    echo "Command: ${bold}${yellow}tar -zcf "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content-old.tar.gz -C "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" wp-content${reset}"
 
     return 1
   else
@@ -830,13 +830,13 @@ thermal_wp_content_restore_local () {
   echo "${bold}${blue}Restoring local wp-content...${reset}"
   echo
 
-  tar -zxf /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content.tar.gz -C /var/www/"${thermal_config_wp_dir}"
+  tar -zxf "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content.tar.gz -C "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Restore local wp-content failed.${reset}"
     echo
-    echo "Command: ${bold}${yellow}tar -zxf /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content.tar.gz -C /var/www/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}tar -zxf "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content.tar.gz -C "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
 
     return 1
   else
@@ -854,13 +854,13 @@ thermal_wp_content_restore_local_old () {
   echo "${bold}${blue}Restoring old local wp-content...${reset}"
   echo
 
-  tar -zxf /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content-old.tar.gz -C /var/www/"${thermal_config_wp_dir}"
+  tar -zxf "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content-old.tar.gz -C "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Restore old local wp-content failed.${reset}"
     echo
-    echo "Command: ${bold}${yellow}tar -zxf /var/www/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content-old.tar.gz -C /var/www/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}tar -zxf "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/"${thermal_config_backup_dir}"/"${thermal_config_name}"_wp-content-old.tar.gz -C "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
 
     return 1
   else
@@ -1672,13 +1672,13 @@ thermal_sync_uploads_down () {
   echo "${bold}${blue}Syncing uploads...${reset}"
   echo
 
-  rsync -r "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content/uploads /var/www/"${thermal_config_wp_dir}"/wp-content
+  rsync -r "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content/uploads "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Sync failed.${reset}"
     echo
-    echo "Command: ${bold}${yellow}rsync -r "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content/uploads /var/www/"${thermal_config_wp_dir}"/wp-content${reset}"
+    echo "Command: ${bold}${yellow}rsync -r "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content/uploads "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content${reset}"
 
     return 1
   else
@@ -1695,13 +1695,13 @@ thermal_sync_uploads_up () {
   echo "${bold}${blue}Syncing uploads...${reset}"
   echo
 
-  rsync -re ssh /var/www/"${thermal_config_wp_dir}"/wp-content/uploads "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content
+  rsync -re ssh "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content/uploads "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Sync failed.${reset}"
     echo
-    echo "Command: ${bold}${yellow}rsync -re ssh /var/www/"${thermal_config_wp_dir}"/wp-content/uploads "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content${reset}"
+    echo "Command: ${bold}${yellow}rsync -re ssh "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content/uploads "${thermal_config_ssh_user}"@"${thermal_config_ssh_host}":"${thermal_config_ssh_path}"/wp-content${reset}"
 
     return 1
   else
@@ -1717,13 +1717,13 @@ thermal_version () {
   echo "${bold}${yellow}Thermal${reset} — Vagrant box for syncing WordPress"
   echo
 
-  if [ -f /var/www/thermal/version ]; then
-    echo "Version: $(cat /var/www/thermal/version)"
+  if [ -f "${thermal_config_ssh_path}"/thermal/version ]; then
+    echo "Version: $(cat "${thermal_config_ssh_path}"/thermal/version)"
     echo
   else
     echo "Version file not detected."
     echo
-    echo "${bold}${yellow}/var/www/thermal/version${reset}"
+    echo "${bold}${yellow}"${thermal_config_ssh_path}"/thermal/version${reset}"
     echo
   fi
 }
