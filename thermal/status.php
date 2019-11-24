@@ -396,7 +396,7 @@
 
         <tr>
           <td>WordPress</td>
-          <td><?php echo ( $wp_version ? '<span title="' . $wp_version . '">✅</span>' : '<span title="No version.php found in /var/www/wordpress/wp-includes">❌</span>' ); ?></td>
+          <td><?php echo ( $wp_version ? '<span title="' . $wp_version . '">✅</span>' : '<span title="No version.php found in ../wp-includes">❌</span>' ); ?></td>
         </tr>
       </table>
 
