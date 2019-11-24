@@ -5,7 +5,15 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Thermal</title>
+    <?php
+      /**
+       * Thermal config.
+       */
+      $thermal_config_name = 'thermal.test';
+      $thermal_config_site = 'site-url.com';
+    ?>
+
+    <title>Status — <?php echo $thermal_config_name; ?></title>
   </head>
 
   <style>
@@ -297,12 +305,6 @@
     }
 
     /**
-     * Thermal config.
-     */
-    $thermal_config_name = 'thermal.test';
-    $thermal_config_site = 'site-url.com';
-
-    /**
      * Thermal status.
      */
     function thermal_status_page() {
@@ -341,7 +343,7 @@
       <div class="splash__content">
         <div class="logo">
           <h1>
-            <a href="//<?php echo $thermal_config_name; ?>" title="<?php echo $thermal_config_name; ?>">Thermal</a>
+            <a href="//<?php echo $thermal_config_name; ?>" title="<?php echo $thermal_config_name; ?>"><?php echo $thermal_config_name; ?></a>
           </h1>
 
           <h2>Vagrant LAMP box for WordPress</h2>
