@@ -32,7 +32,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
       line-height: 1.5;
       color: #111;
-      transition: all .25s ease-out;
+      transition: background .25s ease-out, border .25s ease-out;
     }
 
     a,
@@ -43,11 +43,8 @@
     h5,
     h6,
     p,
-    table,
     tr,
-    .status,
-    .status::before,
-    .thermal-status {
+    .heading {
       transition: all .25s ease-out;
     }
 
@@ -144,6 +141,7 @@
 
     .theme-dark {
       background: #111;
+      color: #fff;
     }
 
     .theme-dark a,
@@ -154,6 +152,10 @@
     .theme-dark h5,
     .theme-dark h6,
     .theme-dark p,
+    .theme-dark table,
+    .theme-dark tr,
+    .theme-dark .status,
+    .theme-dark .status::before,
     .theme-dark .thermal-status {
       color: #fff;
     }
@@ -336,6 +338,19 @@
     }
 
     $mysqli->close();
+
+    /**
+     * Nginx version.
+     */
+    $nginx_version = shell_exec( 'nginx -v 2>&1' );
+
+    /**
+     * Trim Nginx version to number if string
+     * begins with 'nginx version: nginx/'.
+     */
+    if ( substr( $nginx_version, 0, 21 ) === 'nginx version: nginx/' ) {
+      $nginx_version = trim( ltrim( $nginx_version, 'nginx version: nginx/' ) );
+    }
   ?>
 
   <body>
@@ -346,7 +361,7 @@
             <a href="//<?php echo $thermal_config_name; ?>" title="<?php echo $thermal_config_name; ?>"><?php echo $thermal_config_name; ?></a>
           </h1>
 
-          <h2>Vagrant LAMP box for WordPress</h2>
+          <h2>Vagrant LEMP box for WordPress</h2>
         </div>
 
         <div class="thermal-hud">
@@ -381,11 +396,11 @@
       <table class="table">
         <tr>
           <td>OS</td>
-          <td>Debian 10.0</td>
+          <td>Debian 10.2</td>
         </tr>
         <tr>
-          <td>Apache</td>
-          <td><?php echo ( apache_get_version() ? '<span title="' . apache_get_version() . '">✅</span>' : '<span>❌</span>' ); ?></td>
+          <td>Nginx</td>
+          <td><?php echo ( $nginx_version ? '<span title="'.$nginx_version.'">✅</span>' : '<span title="No Nginx install found.">❌</span>' ); ?></td>
         </tr>
         <tr>
           <td>MySQL</td>
@@ -395,7 +410,6 @@
           <td>PHP</td>
           <td><?php echo '<span title="' . phpversion() . '">✅</span>'; ?></td>
         </tr>
-
         <tr>
           <td>WordPress</td>
           <td><?php echo ( $wp_version ? '<span title="' . $wp_version . '">✅</span>' : '<span title="No version.php found in ../wp-includes">❌</span>' ); ?></td>
@@ -456,6 +470,25 @@
         <tr>
           <td>Password</td>
           <td>vagrant</td>
+        </tr>
+      </table>
+
+      <div class="heading">
+        <strong>phpMyAdmin</strong>
+      </div>
+
+      <table class="table">
+        <tr>
+          <td>User</td>
+          <td>root</td>
+        </tr>
+        <tr>
+          <td>Password</td>
+          <td>root</td>
+        </tr>
+        <tr>
+          <td>URL</td>
+          <td><a href="//<?php echo $thermal_config_name; ?>/phpmyadmin"><?php echo $thermal_config_name; ?>/phpmyadmin</a></td>
         </tr>
       </table>
     </div>
