@@ -52,12 +52,12 @@ thermal_apache_servername_update () {
     return 1
   fi
 
-  sudo sed -i "s:/var/www:"${thermal_config_ssh_path}":g" /etc/apache2/sites-available/thermal.conf
+  sudo sed -i "s:/var/www:"${thermal_config_wp_dir}":g" /etc/apache2/sites-available/thermal.conf
 
   if [ $? -ne 0 ]; then
     echo "${red}Error:${reset} Could not update Apache server."
     echo
-    echo "Command: ${bold}${yellow}sudo sed -i "s:/var/www:"${thermal_config_ssh_path}":g" /etc/apache2/sites-available/thermal.conf${reset}"
+    echo "Command: ${bold}${yellow}sudo sed -i "s:/var/www:"${thermal_config_wp_dir}":g" /etc/apache2/sites-available/thermal.conf${reset}"
 
     return 1
   fi
@@ -86,7 +86,7 @@ thermal_check_db () {
   echo "Checking database connection..."
   echo
 
-  wp db check --quiet --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" > /dev/null 2>&1
+  wp db check --quiet --path=/var/www/"${thermal_config_wp_dir}" > /dev/null 2>&1
 
   if [ $? -ne 0 ]; then
     echo "${red}Error:${reset} Could not connect to database.${reset}"
@@ -102,13 +102,13 @@ thermal_check_db () {
 thermal_apache_servername_update
 
 # Check for WordPress main files
-if [ -f "${thermal_config_ssh_path}"/${thermal_config_wp_dir}/wp-includes/version.php ] || [ $(find ""${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"" -name wp-config.php 2> /dev/null) ]; then
+if [ -f /var/www/"${thermal_config_wp_dir}"/wp-includes/version.php ] || [ $(find "/var/www/"${thermal_config_wp_dir}"" -name wp-config.php 2> /dev/null) ]; then
   echo
   echo "WordPress core detected."
 else
 
   # If not found download WordPress
-  wp core download --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet --skip-content --version="${thermal_config_wp_version}"
+  wp core download --path=/var/www/"${thermal_config_wp_dir}" --quiet --skip-content --version="${thermal_config_wp_version}"
 
   if [ $? -ne 0 ]; then
     echo
@@ -117,19 +117,19 @@ else
 fi
 
 # Check for wp-config.php then check database connection
-if [ $(find ""${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"" -name wp-config.php 2> /dev/null) ]; then
+if [ $(find "/var/www/"${thermal_config_wp_dir}"" -name wp-config.php 2> /dev/null) ]; then
   thermal_check_db
 else
   echo
   echo "${blue}Creating wp-config.php...${reset}"
   echo
 
-  wp core config --dbname="thermal" --dbuser="root" --dbpass="root" --dbhost="localhost" --dbprefix="wp_" --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet
+  wp core config --dbname="thermal" --dbuser="root" --dbpass="root" --dbhost="localhost" --dbprefix="wp_" --path=/var/www/"${thermal_config_wp_dir}" --quiet
 
   if [ $? -ne 0 ]; then
     echo "${red}Error:${reset} Failed to create wp-config.php file."
     echo
-    echo "Command: ${bold}${yellow}wp core config --dbname="thermal" --dbuser="root" --dbpass="root" --dbhost="localhost" --dbprefix="wp_" --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"${reset}"
+    echo "Command: ${bold}${yellow}wp core config --dbname="thermal" --dbuser="root" --dbpass="root" --dbhost="localhost" --dbprefix="wp_" --path=/var/www/"${thermal_config_wp_dir}"${reset}"
   else
     echo "${green}Successfully created wp-config.php.${reset}"
   fi
@@ -138,19 +138,19 @@ else
 fi
 
 # Check if WordPress installed in database
-wp core is-installed --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet > /dev/null 2>&1
+wp core is-installed --path=/var/www/"${thermal_config_wp_dir}" --quiet > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
   echo
   echo "Installing WordPress..."
   echo
 
-  wp core install --admin_email="thermal@thermal.test" --admin_password="vagrant" --admin_user="thermal" --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --quiet --skip-email --url="${thermal_config_name}" --title="Thermal" > /dev/null 2>&1
+  wp core install --admin_email="thermal@thermal.test" --admin_password="vagrant" --admin_user="thermal" --path=/var/www/"${thermal_config_wp_dir}" --quiet --skip-email --url="${thermal_config_name}" --title="Thermal" > /dev/null 2>&1
 
   if [ $? -ne 0 ]; then
     echo "${red}Error:${reset} Could not install WordPress.${reset}"
     echo
-    echo "Command: ${bold}${yellow}wp core install --quiet --skip-email --path="${thermal_config_ssh_path}"/"${thermal_config_wp_dir}" --url="${thermal_config_name}" --title="Thermal" --admin_user="thermal" --admin_password="vagrant" --admin_email="thermal@thermal.test"${reset}"
+    echo "Command: ${bold}${yellow}wp core install --quiet --skip-email --path=/var/www/"${thermal_config_wp_dir}" --url="${thermal_config_name}" --title="Thermal" --admin_user="thermal" --admin_password="vagrant" --admin_email="thermal@thermal.test"${reset}"
     echo
   else
     echo "${green}Successfully installed WordPress.${reset}"
@@ -159,46 +159,46 @@ if [ $? -ne 0 ]; then
 fi
 
 # Check if plugins directory exists
-if [ ! -d "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content/plugins ]; then
-  mkdir "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content/plugins
+if [ ! -d /var/www/"${thermal_config_wp_dir}"/wp-content/plugins ]; then
+  mkdir /var/www/"${thermal_config_wp_dir}"/wp-content/plugins
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Could not create plugins directory.${reset}"
     echo
-    echo "Command: ${bold}${yellow}mkdir "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content/plugins${reset}"
+    echo "Command: ${bold}${yellow}mkdir /var/www/"${thermal_config_wp_dir}"/wp-content/plugins${reset}"
     echo
   fi
 fi
 
 # Check if themes directory exists
-if [ ! -d "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content/themes ]; then
-  mkdir "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content/themes
+if [ ! -d /var/www/"${thermal_config_wp_dir}"/wp-content/themes ]; then
+  mkdir /var/www/"${thermal_config_wp_dir}"/wp-content/themes
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Could not create themes directory.${reset}"
     echo
-    echo "Command: ${bold}${yellow}mkdir "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/wp-content/themes${reset}"
+    echo "Command: ${bold}${yellow}mkdir /var/www/"${thermal_config_wp_dir}"/wp-content/themes${reset}"
     echo
   fi
 fi
 
 # Pass config variable to status page
-sudo sed -i "s:thermal_config_name = 'thermal.test':thermal_config_name = '"${thermal_config_name}"':g" "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/thermal/status.php
-sudo sed -i "s:thermal_config_site = 'site-url.com':thermal_config_site = '"${thermal_config_site}"':g" "${thermal_config_ssh_path}"/"${thermal_config_wp_dir}"/thermal/status.php
+sudo sed -i "s:thermal_config_name = 'thermal.test':thermal_config_name = '"${thermal_config_name}"':g" /var/www/"${thermal_config_wp_dir}"/thermal/status.php
+sudo sed -i "s:thermal_config_site = 'site-url.com':thermal_config_site = '"${thermal_config_site}"':g" /var/www/"${thermal_config_wp_dir}"/thermal/status.php
 
 # Correct permission of public key
 chmod 600 ~/.ssh/id_rsa
 
 # Install Thermal
-echo ". "${thermal_config_ssh_path}"/thermal/thermal.sh" >> ~/.profile
+echo ". "${thermal_config_wp_dir}"/thermal/thermal.sh" >> ~/.profile
 
 if [ $? -ne 0 ]; then
   echo
   echo "${red}Error:${reset} Could not install Thermal.${reset}"
   echo
-  echo "Command: ${bold}${yellow}. "${thermal_config_ssh_path}"/thermal/thermal.sh${reset}"
+  echo "Command: ${bold}${yellow}. "${thermal_config_wp_dir}"/thermal/thermal.sh${reset}"
   echo
 fi
 
