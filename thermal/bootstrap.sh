@@ -37,47 +37,47 @@ else
   return 1
 fi
 
-thermal_apache_servername_update () {
+thermal_nginx_server_name_update () {
   echo
-  echo "Updating Apache server..."
+  echo "Updating Nginx server..."
   echo
 
-  sudo sed -i "s:ServerName thermal.test:ServerName "${thermal_config_name}":g" /etc/apache2/sites-available/thermal.conf
+  sudo sed -i "s:server_name thermal.test:server_name "${thermal_config_name}":g" /etc/nginx/sites-available/thermal
 
   if [ $? -ne 0 ]; then
-    echo "${red}Error:${reset} Could not update Apache server."
+    echo "${red}Error:${reset} Failed to update Nginx server."
     echo
-    echo "Command: ${bold}${yellow}sudo sed -i "s:ServerName thermal.test:ServerName "${thermal_config_name}":g" /etc/apache2/sites-available/thermal.conf${reset}"
+    echo "Command: ${bold}${yellow}sudo sed -i "s:server_name thermal.test:server_name "${thermal_config_name}":g" /etc/nginx/sites-available/thermal${reset}"
 
     return 1
   fi
 
-  sudo sed -i "s:/var/www:"${thermal_config_wp_dir}":g" /etc/apache2/sites-available/thermal.conf
+  sudo sed -i "s:/var/www:/var/www/"${thermal_config_wp_dir}":g" /etc/nginx/sites-available/thermal
 
   if [ $? -ne 0 ]; then
-    echo "${red}Error:${reset} Could not update Apache server."
+    echo "${red}Error:${reset} Failed to update Nginx server."
     echo
-    echo "Command: ${bold}${yellow}sudo sed -i "s:/var/www:"${thermal_config_wp_dir}":g" /etc/apache2/sites-available/thermal.conf${reset}"
+    echo "Command: ${bold}${yellow}sudo sed -i "s:/var/www:/var/www/"${thermal_config_wp_dir}":g" /etc/nginx/sites-available/thermal${reset}"
 
     return 1
   fi
 
-  sudo sed -i "s:ServerName status.thermal.test:ServerName status."${thermal_config_name}":g" /etc/apache2/sites-available/thermal.conf
+  sudo sed -i "s:server_name status.thermal.test:server_name status."${thermal_config_name}":g" /etc/nginx/sites-available/thermal
 
   if [ $? -ne 0 ]; then
-    echo "${red}Error:${reset} Could not update Apache server for status page."
+    echo "${red}Error:${reset} Failed to update Nginx server for status page."
     echo
-    echo "Command: ${bold}${yellow}sudo sed -i "s:ServerName status.thermal.test:ServerName status."${thermal_config_name}":g" /etc/apache2/sites-available/thermal.conf${reset}"
+    echo "Command: ${bold}${yellow}sudo sed -i "s:server_name status.thermal.test:server_name status."${thermal_config_name}":g" /etc/nginx/sites-available/thermal${reset}"
 
     return 1
   fi
 
-  sudo service apache2 restart
+  sudo service nginx restart
 
   if [ $? -ne 0 ]; then
-    echo "${red}Error:${reset} Could not restart Apache."
+    echo "${red}Error:${reset} Failed to restart Nginx."
   else
-    echo "${green}Successfully updated Apache server.${reset}"
+    echo "${green}Successfully updated Nginx server.${reset}"
   fi
 }
 
@@ -89,7 +89,7 @@ thermal_check_db () {
   wp db check --quiet --path=/var/www/"${thermal_config_wp_dir}" > /dev/null 2>&1
 
   if [ $? -ne 0 ]; then
-    echo "${red}Error:${reset} Could not connect to database.${reset}"
+    echo "${red}Error:${reset} Failed to connect to database.${reset}"
     echo
     echo "Exiting..."
 
@@ -99,10 +99,10 @@ thermal_check_db () {
   fi
 }
 
-thermal_apache_servername_update
+thermal_nginx_server_name_update
 
 # Check for WordPress main files
-if [ -f /var/www/"${thermal_config_wp_dir}"/wp-includes/version.php ] || [ $(find "/var/www/"${thermal_config_wp_dir}"" -name wp-config.php 2> /dev/null) ]; then
+if [ -f /var/www/"${thermal_config_wp_dir}"/wp-includes/version.php ] || [ $(find /var/www/"${thermal_config_wp_dir}" -name wp-config.php 2> /dev/null) ]; then
   echo
   echo "WordPress core detected."
 else
@@ -148,7 +148,7 @@ if [ $? -ne 0 ]; then
   wp core install --admin_email="thermal@thermal.test" --admin_password="vagrant" --admin_user="thermal" --path=/var/www/"${thermal_config_wp_dir}" --quiet --skip-email --url="${thermal_config_name}" --title="Thermal" > /dev/null 2>&1
 
   if [ $? -ne 0 ]; then
-    echo "${red}Error:${reset} Could not install WordPress.${reset}"
+    echo "${red}Error:${reset} Failed to install WordPress.${reset}"
     echo
     echo "Command: ${bold}${yellow}wp core install --quiet --skip-email --path=/var/www/"${thermal_config_wp_dir}" --url="${thermal_config_name}" --title="Thermal" --admin_user="thermal" --admin_password="vagrant" --admin_email="thermal@thermal.test"${reset}"
     echo
@@ -164,7 +164,7 @@ if [ ! -d /var/www/"${thermal_config_wp_dir}"/wp-content/plugins ]; then
 
   if [ $? -ne 0 ]; then
     echo
-    echo "${red}Error:${reset} Could not create plugins directory.${reset}"
+    echo "${red}Error:${reset} Failed to create plugins directory.${reset}"
     echo
     echo "Command: ${bold}${yellow}mkdir /var/www/"${thermal_config_wp_dir}"/wp-content/plugins${reset}"
     echo
@@ -187,13 +187,13 @@ sudo sed -i "s:thermal_config_site = 'site-url.com':thermal_config_site = '"${th
 chmod 600 ~/.ssh/id_rsa
 
 # Install Thermal
-echo ". "${thermal_config_wp_dir}"/thermal/thermal.sh" >> ~/.profile
+echo ". /var/www/"${thermal_config_wp_dir}"/thermal/thermal.sh" >> ~/.profile
 
 if [ $? -ne 0 ]; then
   echo
-  echo "${red}Error:${reset} Could not install Thermal.${reset}"
+  echo "${red}Error:${reset} Failed to install Thermal.${reset}"
   echo
-  echo "Command: ${bold}${yellow}. "${thermal_config_wp_dir}"/thermal/thermal.sh${reset}"
+  echo "Command: ${bold}${yellow}. /var/www/"${thermal_config_wp_dir}"/thermal/thermal.sh${reset}"
   echo
 fi
 
