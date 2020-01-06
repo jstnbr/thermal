@@ -172,7 +172,7 @@ if [ ! -d /var/www/"${thermal_config_wp_dir}"/wp-content/plugins ]; then
 fi
 
 # If no theme install Twentytwenty
-if [ $(wp theme list --format=count) == 0 ]; then
+if [ $(wp theme list --format=count --path=/var/www/"${thermal_config_wp_dir}") == 0 ]; then
   wp theme install twentytwenty --activate --path=/var/www/"${thermal_config_wp_dir}" --quiet > /dev/null 2>&1
 fi
 
