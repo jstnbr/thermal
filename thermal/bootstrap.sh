@@ -176,6 +176,9 @@ if [ $(wp theme list --format=count) == 0 ]; then
   wp theme install twentytwenty --activate --path=/var/www/"${thermal_config_wp_dir}" --quiet > /dev/null 2>&1
 fi
 
+# Serve phpMyAdmin
+ln -s /usr/share/phpmyadmin /var/www/"${thermal_config_wp_dir}"
+
 # Pass config variable to status page
 sudo sed -i "s:thermal_config_name = 'thermal.test':thermal_config_name = '"${thermal_config_name}"':g" /var/www/"${thermal_config_wp_dir}"/thermal/status.php
 sudo sed -i "s:thermal_config_site = 'site-url.com':thermal_config_site = '"${thermal_config_site}"':g" /var/www/"${thermal_config_wp_dir}"/thermal/status.php
