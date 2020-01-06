@@ -171,17 +171,9 @@ if [ ! -d /var/www/"${thermal_config_wp_dir}"/wp-content/plugins ]; then
   fi
 fi
 
-# Check if themes directory exists
-if [ ! -d /var/www/"${thermal_config_wp_dir}"/wp-content/themes ]; then
-  mkdir /var/www/"${thermal_config_wp_dir}"/wp-content/themes
-
-  if [ $? -ne 0 ]; then
-    echo
-    echo "${red}Error:${reset} Could not create themes directory.${reset}"
-    echo
-    echo "Command: ${bold}${yellow}mkdir /var/www/"${thermal_config_wp_dir}"/wp-content/themes${reset}"
-    echo
-  fi
+# If no theme install Twentytwenty
+if [ $(wp theme list --format=count) == 0 ]; then
+  wp theme install twentytwenty --activate --path=/var/www/"${thermal_config_wp_dir}" --quiet > /dev/null 2>&1
 fi
 
 # Pass config variable to status page
