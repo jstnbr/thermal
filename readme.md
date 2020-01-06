@@ -1,6 +1,6 @@
 # Thermal
 
-Vagrant LAMP box for WordPress
+Vagrant LEMP box for WordPress
 
 > An automated WordPress development environment.
 
@@ -28,7 +28,7 @@ vagrant plugin install vagrant-vbguest
 * Run `vagrant up` from your project directory.
 * View your project at `http://your-name.test`.
 
-SSH into the VM by running `vagrant ssh` to run `thermal` commands.
+To run `thermal` commands SSH into the VM by running `vagrant ssh`.
 
 ## Thermal Commands
 
@@ -105,28 +105,35 @@ thermal sync [database | uploads | wp-content] [down | up]
 
 ## Vagrant Commands
 
-| Command | Description |
-| ------- | ----------- |
-| `vagrant up` | Start or resume |
-| `vagrant destroy` | Delete |
-| `vagrant suspend` | Pause |
-| `vagrant reload` | Reload |
-| `vagrant ssh` | SSH |
+| Description | Command |
+| ----------- | ------- |
+| Start or resume | `vagrant up` |
+| Delete | `vagrant destroy` |
+| Pause | `vagrant suspend` |
+| Reload | `vagrant reload` |
+| SSH | `vagrant ssh` |
 
 ## Credentials
 
-##### Database
+#### Database
 
-| Command | Description |
-| ------- | ----------- |
-| `thermal` | Database |
-| `root` | Username |
-| `root` | Password |
-| `localhost` | Hostname |
+| Description | Command |
+| ----------- | ------- |
+| Database | `thermal` |
+| Username | `root` |
+| Password | `root` |
+| Hostname | `localhost` |
 
-##### WordPress
+#### WordPress
 
-| Command | Description |
-| ------- | ----------- |
-| `thermal` | Username |
-| `vagrant` | Password |
+| Description | Command |
+| ----------- | ------- |
+| Username | `thermal` |
+| Password | `vagrant` |
+
+#### phpMyAdmin
+
+| Description | Command |
+| ----------- | ------- |
+| Username | `root` |
+| Password | `root` |
