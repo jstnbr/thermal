@@ -11,9 +11,24 @@ Vagrant LEMP box for WordPress
 - :rocket: Ship code easily
 - :electric_plug: Work without internet
 
+## Requirements
+
+- [Vagrant](https://www.vagrantup.com "Vagrant Homepage")
+- [VirtualBox](https://www.virtualbox.org "VirtualBox Homepage") (or a different provider)
+- SSH access
+
+#### SSH
+
+Your public key is copied to Thermal on provision and is expected to be located in `~/.ssh/id_rsa.pub`. For Thermal to work, first confirm you have SSH access to the server with your key.
+
+#### Note
+
+- If you aren’t using a Mac, you may need to turn on virtualization in BIOS
+- If you have Hyper-V on, VirtualBox will not work
+
 ## Getting Started
 
-Install [Vagrant](https://www.vagrantup.com "Vagrant Homepage") and [VirtualBox](https://www.virtualbox.org "VirtualBox Homepage") on your computer. Then install the following Vagrant plugins by running:
+Install Vagrant and VirtualBox on your computer. Then install the following Vagrant plugins by running:
 
 ```
 vagrant plugin install vagrant-hostsupdater
