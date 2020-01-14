@@ -33,4 +33,28 @@ Vagrant.configure("2") do |config|
   # [Optional] Vagrant Plugin Hostsupdater
   # https://github.com/cogitatio/vagrant-hostsupdater
   config.hostsupdater.aliases = ["status." + setting["config"]["name"]]
+
+  welcome = <<WELCOME
+
+/__   \\ |__   ___ _ __ _ __ ___   __ _| |
+  / /\\/ '_ \\ / _ \\ '__| '_ ` _ \\ / _` | |
+ / /  | | | |  __/ |  | | | | | | (_| | |
+ \\/   |_| |_|\\___|_|  |_| |_| |_|\\__,_|_|
+
+Vagrant LEMP box for WordPress
+
+----------------------------------------------
+
+Local ip address 192.168.55.10
+
+URLS:
+- site        - http://#{setting["config"]["name"]}
+- status      - http://status.#{setting["config"]["name"]}
+- phpmyadmin  - http://#{setting["config"]["name"]}/phpmyadmin
+
+----------------------------------------------
+ 
+WELCOME
+
+  config.vm.post_up_message = welcome
 end
