@@ -72,6 +72,7 @@ thermal_nginx_server_name_update () {
     return 1
   fi
 
+  sudo service apache2 stop
   sudo service nginx restart
 
   if [ $? -ne 0 ]; then
