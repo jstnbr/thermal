@@ -653,13 +653,13 @@ EOF
 }
 
 thermal_refresh () {
-  . "${thermal_config_wp_dir}"/thermal/thermal.sh
+  . /var/www/"${thermal_config_wp_dir}"/thermal/thermal.sh
 
   if [ $? -ne 0 ]; then
     echo
     echo "${red}Error:${reset} Could not refresh Thermal."
     echo
-    echo "Command: ${bold}${yellow}. "${thermal_config_wp_dir}"/thermal/thermal.sh${reset}"
+    echo "Command: ${bold}${yellow}. /var/www/"${thermal_config_wp_dir}"/thermal/thermal.sh${reset}"
     echo
   else
     echo
