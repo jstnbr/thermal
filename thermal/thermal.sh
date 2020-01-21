@@ -1311,8 +1311,19 @@ thermal_sync_up () {
     return 1
   fi
 
-  if [ ${backup_dir_remote_exists} != true ]; then
-    thermal_repair_backup_dir
+  # Check backup directory
+  thermal_check_backup_dir > /dev/null 2>&1
+
+  if [ ${backup_dir_local_exists} != true ] || [ ${backup_dir_remote_exists} != true ]; then
+    thermal_repair_backup_dir > /dev/null 2>&1
+
+    thermal_check_backup_dir > /dev/null 2>&1
+
+    if [ ${backup_dir_local_exists} != true ]; then
+      echo "${red}Local backup directory not found.${reset}"
+
+      return 1
+    fi
 
     if [ ${backup_dir_remote_exists} != true ]; then
       echo "${red}Remote backup directory not found.${reset}"
